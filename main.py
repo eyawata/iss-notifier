@@ -1,3 +1,5 @@
+import smtplib
+import time
 from datetime import datetime
 
 import requests
@@ -50,10 +52,17 @@ def sun_down():
         return False
 
 
-if sun_down() and below_iss():
-    print("LOOOOOOK UP")
-else:
-    print("not yet")
+while True:
+    time.sleep(60)
+    if below_iss() and sun_down():
+        connection = smtplib.SMTP("smtp.gmail.com")
+        connection.starttls()
+        connection.login("fake_email@mail.com", "1234567")
+        connection.sendmail(
+            from_addr="fake_email@mail.com",
+            to_addrs="fake_email@mail.com",
+            msg="Subject:Look up 👆 \n\n The ISS is above you in the sky.",
+        )
 
     # Then send me an email to tell me to look up.
     # # BONUS: run the code every 60 seconds.
